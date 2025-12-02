@@ -6,11 +6,11 @@
 import { computed } from "vue";
 import { useBeverageStore } from "../stores/beverageStore";
 
-const props = defineProps<{ type: string }>();
+const props = defineProps<{ type?: string }>();
 const store = useBeverageStore();
 
 const baseColor = computed(() => {
-  const item = store.bases.find(b => b.name === props.type);
+  const item = store.bases.find((b) => b.name === props.type);
   return item ? item.color : "#6F4E37";
 });
 </script>
