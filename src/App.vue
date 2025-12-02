@@ -2,9 +2,9 @@
   <div>
     <Beverage
       :isIced="store.currentTemp === 'Cold'"
-      :base="store.currentBase?.name"
-      :creamer="store.currentCreamer?.name"
-      :syrup="store.currentSyrup?.name"
+      :base="store.currentBase?.name || ''"
+      :creamer="store.currentCreamer?.name || ''"
+      :syrup="store.currentSyrup?.name || ''"
     />
 
     <!-- Temperature -->
@@ -24,7 +24,7 @@
       </li>
     </ul>
 
-    <!-- Base -->
+    <!-- Bases -->
     <ul class="options-row">
       <li v-for="b in store.bases" :key="b.id">
         <label>
@@ -34,51 +34,36 @@
       </li>
     </ul>
 
-    <!-- Creamer -->
+    <!-- Creamers -->
     <ul class="options-row">
       <li v-for="c in store.creamers" :key="c.id">
         <label>
-          <input
-            type="radio"
-            name="creamer"
-            :value="c"
-            v-model="store.currentCreamer"
-          />
+          <input type="radio" name="creamer" :value="c" v-model="store.currentCreamer" />
           {{ c.name }}
         </label>
       </li>
     </ul>
 
-    <!-- Syrup -->
+    <!-- Syrups -->
     <ul class="options-row">
       <li v-for="s in store.syrups" :key="s.id">
         <label>
-          <input
-            type="radio"
-            name="syrup"
-            :value="s"
-            v-model="store.currentSyrup"
-          />
+          <input type="radio" name="syrup" :value="s" v-model="store.currentSyrup" />
           {{ s.name }}
         </label>
       </li>
     </ul>
 
-    <!-- Make Beverage -->
-    <input
-      type="text"
-      placeholder="Beverage Name"
-      v-model="store.beverageName"
-    />
+    <input type="text" placeholder="Beverage Name" v-model="store.beverageName" />
     <button @click="store.makeBeverage()">🍺 Make Beverage</button>
 
-    <!-- Saved Beverages -->
     <div id="beverage-container" style="margin-top: 20px">
       <h3>Saved Beverages</h3>
+
       <ul>
         <li v-for="bev in store.savedBeverages" :key="bev.id">
           <label>
-            <input type="radio" name="saved" @change="store.showBeverage(bev)" />
+            <input type="radio" name="saved-bevs" @change="store.showBeverage(bev)" />
             {{ bev.name }}
           </label>
         </li>
@@ -107,7 +92,6 @@ html {
   align-items: center;
   justify-content: center;
   height: 100%;
-  background-color: #6e4228;
   background: linear-gradient(to bottom, #6e4228 0%, #956f5a 100%);
 }
 
