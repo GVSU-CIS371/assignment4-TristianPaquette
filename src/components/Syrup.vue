@@ -1,17 +1,25 @@
 <template>
   <div
+    v-if="type !== 'No Syrup'"
     class="syrup"
-    :style="{ '--texture-color': store.currentSyrup?.color }"
+    :style="{ '--texture-color': syrupColor }"
   ></div>
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import { useBeverageStore } from "../stores/beverageStore";
 
+const props = defineProps<{ type?: string }>();
 const store = useBeverageStore();
+
+const syrupColor = computed(() => {
+  const item = store.syrups.find((s) => s.name === props.type);
+  return item ? item.color : "transparent";
+});
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .syrup {
   transform: translateY(400%);
   position: relative;
@@ -26,6 +34,5 @@ const store = useBeverageStore();
     rgba(225, 207, 149, 1) 10px,
     rgba(225, 207, 149, 1) 20px
   );
-  border-radius: 4px;
 }
 </style>
