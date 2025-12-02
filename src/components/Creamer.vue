@@ -13,11 +13,11 @@
 import { computed } from "vue";
 import { useBeverageStore } from "../stores/beverageStore";
 
-const props = defineProps<{ type: string }>();
+const props = defineProps<{ type?: string }>();
 const store = useBeverageStore();
 
 const foamColor = computed(() => {
-  const item = store.creamers.find(c => c.name === props.type);
+  const item = store.creamers.find((c) => c.name === props.type);
   return item ? item.color : "#e4e0d2";
 });
 </script>
@@ -35,40 +35,16 @@ const foamColor = computed(() => {
 
 .foam {
   display: block;
+  background: #e4e0d2;
   border-radius: 30px;
   height: 40px;
   width: 40px;
   position: absolute;
 }
 
-.foam:nth-child(1) {
-  top: 0px;
-  left: -3px;
-}
-
-.foam:nth-child(2) {
-  top: 0px;
-  left: 55px;
-}
-
-.foam:nth-child(3) {
-  width: 30px;
-  height: 30px;
-  border-radius: 40px;
-  top: 3px;
-  left: 30px;
-}
-
-.foam:nth-child(4) {
-  width: 30px;
-  height: 30px;
-  border-radius: 45px;
-  top: 5px;
-  right: -2px;
-}
-
-.foam:nth-child(5) {
-  top: 2px;
-  right: 10px;
-}
+.foam:nth-child(1) { top: 0px; left: -3px; }
+.foam:nth-child(2) { top: 0px; left: 55px; }
+.foam:nth-child(3) { top: 3px; left: 30px; width: 30px; height: 30px; }
+.foam:nth-child(4) { top: 5px; right: -2px; width: 30px; height: 30px; }
+.foam:nth-child(5) { top: 2px; right: 10px; }
 </style>
