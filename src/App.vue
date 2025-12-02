@@ -1,80 +1,87 @@
 <template>
   <div>
-    <Beverage :isIced="beverageStore.currentTemp === 'Cold'" />
+    <Beverage
+      :isIced="store.currentTemp === 'Cold'"
+      :base="store.currentBase?.name || ''"
+      :creamer="store.currentCreamer?.name || ''"
+      :syrup="store.currentSyrup?.name || ''"
+    />
+
+    <!-- Temperature -->
     <ul>
       <li>
-        <template v-for="temp in beverageStore.temps" :key="temp">
+        <template v-for="temp in store.temps" :key="temp">
           <label>
             <input
               type="radio"
-              name="temperature"
-              :id="`r${temp}`"
+              name="temp"
               :value="temp"
-              v-model="beverageStore.currentTemp"
+              v-model="store.currentTemp"
             />
             {{ temp }}
           </label>
         </template>
       </li>
     </ul>
-    <ul>
-      <li>
-        <template v-for="b in beverageStore.bases" :key="b.id">
-          <label>
-            <input
-              type="radio"
-              name="bases"
-              :id="`r${b.id}`"
-              :value="b"
-              v-model="beverageStore.currentBase"
-            />
-            {{ b.name }}
-          </label>
-        </template>
+
+    <!-- Bases -->
+    <ul class="options-row">
+      <li v-for="b in store.bases" :key="b.id">
+        <label>
+          <input type="radio" name="base" :value="b" v-model="store.currentBase" />
+          {{ b.name }}
+        </label>
       </li>
     </ul>
-    <ul>
-      <li>
-        <template v-for="s in beverageStore.syrups" :key="s.id">
-          <label>
-            <input
-              type="radio"
-              name="syrups"
-              :id="`r${s.id}`"
-              :value="s"
-              v-model="beverageStore.currentSyrup"
-            />
-            {{ s.name }}
-          </label>
-        </template>
+
+    <!-- Creamers -->
+    <ul class="options-row">
+      <li v-for="c in store.creamers" :key="c.id">
+        <label>
+          <input type="radio" name="creamer" :value="c" v-model="store.currentCreamer" />
+          {{ c.name }}
+        </label>
       </li>
     </ul>
-    <ul>
-      <li>
-        <template v-for="c in beverageStore.creamers" :key="c.id">
-          <label>
-            <input
-              type="radio"
-              name="creamers"
-              :id="`r${c.id}`"
-              :value="c"
-              v-model="beverageStore.currentCreamer"
-            />
-            {{ c.name }}
-          </label>
-        </template>
+
+    <!-- Syrups -->
+    <ul class="options-row">
+      <li v-for="s in store.syrups" :key="s.id">
+        <label>
+          <input type="radio" name="syrup" :value="s" v-model="store.currentSyrup" />
+          {{ s.name }}
+        </label>
       </li>
     </ul>
-    <input type="text" placeholder="Beverage Name" />
-    <button>🍺 Make Beverage</button>
+
+    <input type="text" placeholder="Beverage Name" v-model="store.beverageName" />
+    <button @click="store.makeBeverage()">🍺 Make Beverage</button>
+
+    <div id="beverage-container" style="margin-top: 20px">
+      <h3>Saved Beverages</h3>
+
+      <ul>
+        <li v-for="bev in store.savedBeverages" :key="bev.id">
+          <label>
+            <input type="radio" name="saved-bevs" @change="store.showBeverage(bev)" />
+            {{ bev.name }}
+          </label>
+        </li>
+      </ul>
+    </div>
   </div>
-  <div id="beverage-container" style="margin-top: 20px"></div>
 </template>
 
 <script setup lang="ts">
 import Beverage from "./components/Beverage.vue";
 import { useBeverageStore } from "./stores/beverageStore";
-const beverageStore = useBeverageStore();
+import { onMounted } from "vue";
+
+const store = useBeverageStore();
+
+onMounted(() => {
+  store.init();
+});
 </script>
 
 <style lang="scss">
@@ -85,10 +92,17 @@ html {
   align-items: center;
   justify-content: center;
   height: 100%;
-  background-color: #6e4228;
   background: linear-gradient(to bottom, #6e4228 0%, #956f5a 100%);
 }
+
 ul {
   list-style: none;
+}
+
+.options-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 0.25rem 0;
 }
 </style>
